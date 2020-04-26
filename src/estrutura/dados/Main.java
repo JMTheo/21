@@ -25,8 +25,9 @@ public class Main {
         //Adicionar o validador dps
         int escolha = Integer.parseInt(scanner.nextLine());
         int qtdJogos = 0;
+        boolean[][] score = new boolean[3][escolha];
 
-        while (qtdJogos <= escolha ){
+        while (qtdJogos < escolha ){
             System.out.println("Distribuindo as cartas...");
             boolean roundFinalizado = false;
             //Cada jogador compra duas cartas
@@ -41,6 +42,9 @@ public class Main {
                 System.out.println("Valor da mão: " + cartasJogador.calcularMao() + "\n");
 
                 imprimirBaralho(cartasIA);
+
+                if(roundFinalizado)
+                    break;
 
                 if(cartasIA.calcularMao() <= 10 && cartasIA.calcularMao() <= 18 ) {
                     cartasIA.comprarCarta(baralho);
@@ -84,10 +88,15 @@ public class Main {
 
             if(cartasJogador.calcularMao() == cartasIA.calcularMao())
                 System.out.println("O jogo EMPATOU");
-            else if((cartasJogador.calcularMao() > cartasIA.calcularMao()) && !roundFinalizado)
+            else if((cartasJogador.calcularMao() > cartasIA.calcularMao()) && !roundFinalizado){
                 System.out.println("O jogador ganhou.");
-            else
+                score[0][qtdJogos] = true;
+                score[1][qtdJogos] = false;
+            }else{
                 System.out.println("A IA GANHOU");
+                score[1][qtdJogos] = true;
+                score[0][qtdJogos] = false;
+            }
 
             System.out.println("Cartas IA: " + cartasIA.calcularMao());
             System.out.println("Cartas Jogador: " + cartasJogador.calcularMao());
@@ -99,8 +108,28 @@ public class Main {
             cartasJogador.devolverCartas(baralho);
             cartasIA.devolverCartas(baralho);
 
-            if(qtdJogos == escolha)
+            if(qtdJogos == escolha){
+                int contadorJ = 0;
+                int contadorIA = 0;
+                int contadorEmpates = 0;
+
                 System.out.println("Jogo Finalizado");
+
+                for (int i = 0; i < escolha; i++) {
+                    if (score[0][i])
+                        contadorJ++;
+
+                    if (score[1][i])
+                        contadorIA++;
+
+                    if (score[2][i])
+                        contadorEmpates++;
+                }
+                System.out.println("=== PLACAR FINAL ===");
+                System.out.println("Vitorias Jogador: " + contadorJ);
+                System.out.println("Vitorias IA: " + contadorIA);
+                System.out.println("Empates: " + contadorEmpates);
+            }
             else
                 System.out.println("Round finalizado.");
 
@@ -120,7 +149,7 @@ public class Main {
     public static void imprimirBaralho(Baralho baralho){
         String tmp = "";
         for (int i = 1; i < baralho.verificarTamanhoBaralho(); i++){
-            tmp += baralho.getCarta(i).toString();
+            tmp += baralho.getCarta(i).toString() + ",   ";
         }
             System.out.println("Mão do oponente: " + tmp + " e a outro está virada ");
     }
