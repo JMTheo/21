@@ -10,6 +10,6 @@ BCC - 3º Semestre
 + José Augusto
 + Wesley Vitorio
 
-#TODO:
+# TODO:
 + Fazer o histórico das jogadas [Matriz 2]
 + Adicionar a classe Validador
