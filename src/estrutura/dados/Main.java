@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("=== 21 ===");
+        System.out.println("=== Blackjack ===");
 
         //Baralho do jogo
         Baralho baralho = new Baralho();
@@ -23,14 +23,15 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Escolha a quantidade de partidas, 3 ou 5");
         //Adicionar o validador dps
-        int escolha = Integer.parseInt(scanner.nextLine());
+        int escolha = Validador.validarInt(scanner.nextLine());
         int qtdJogos = 0;
         boolean[][] score = new boolean[3][escolha];
+        int[][] scoreDetalhado = new int[2][escolha];
 
         while (qtdJogos < escolha ){ 
             System.out.println("Distribuindo as cartas...");
             boolean roundFinalizado = false;
-            System.out.println(baralho.calcularMao());
+
             //Cada jogador compra duas cartas
             cartasIA.comprarCarta(baralho);
             cartasIA.comprarCarta(baralho);
@@ -39,41 +40,46 @@ public class Main {
             cartasJogador.comprarCarta(baralho);
 
             while (true){
-                System.out.println("A sua mão:" + cartasJogador.toString());
+                System.out.println("\nA sua mão:" + cartasJogador.toString());
                 System.out.println("Valor da mão: " + cartasJogador.calcularMao() + "\n");
 
+                TimeUnit.SECONDS.sleep(1);
                 imprimirBaralho(cartasIA);
-
-                if(roundFinalizado)
-                    break;
-
-
 
                 System.out.println("O que deseja fazer, (1)comprar ou (2)parar ?");
                 //Validador dps
-                int escolhaUsuario = Integer.parseInt(scanner.nextLine());
+                int escolhaUsuario = Validador.validarInt(scanner.nextLine());
 
                 if(escolhaUsuario == 1){
                     cartasJogador.comprarCarta(baralho);
-                    System.out.println("Você comprou um:" + cartasJogador.getCarta(cartasJogador.verificarTamanhoBaralho()-1).toString());
 
-                    if(cartasJogador.calcularMao() > 21){
-                        System.out.println("SE FODEU: " + cartasJogador.calcularMao());
-                        roundFinalizado = true;
-                        break;
+                    System.out.println("Você tem certeza ? (1)Sim (2)Voltar");
+
+                    if(Validador.validarInt(scanner.nextLine()) == 1){
+                        System.out.println("Você comprou um:" + cartasJogador.getCarta(cartasJogador.verificarTamanhoBaralho()-1).toString());
+
+                        if(cartasJogador.calcularMao() > 21){
+                            System.out.println("Você estourou: " + cartasJogador.calcularMao());
+                            roundFinalizado = true;
+                            break;
+                        }
+                    } else {
+                      cartasJogador.removerCarta(cartasJogador.verificarTamanhoBaralho()-1);
                     }
+
                 }
 
                 if(escolhaUsuario == 2)
                     break;
             }
+            TimeUnit.SECONDS.sleep(1);
 
-            if((cartasIA.calcularMao() <= 10) && (cartasIA.calcularMao() <= 18)) {
+            if((cartasIA.calcularMao() < 15) && !roundFinalizado) {
                 cartasIA.comprarCarta(baralho);
-                System.out.println("A IA comprou: " + cartasIA.getCarta(cartasIA.verificarTamanhoBaralho()-1).toString());
+                System.out.println("O banqueiro comprou: " + cartasIA.getCarta(cartasIA.verificarTamanhoBaralho()-1).toString());
 
                 if(cartasIA.calcularMao() > 21) {
-                    System.out.println("IA se fodeu: " + cartasIA.calcularMao());
+                    System.out.println("O banqueiro estourou: " + cartasIA.calcularMao());
                     roundFinalizado = true;
                 }
             }
@@ -81,28 +87,31 @@ public class Main {
             //Talvez compre, talvez nao
             if(cartasIA.calcularMao() < 15 && condicao() && !roundFinalizado){
                 cartasIA.comprarCarta(baralho);
-                System.out.println("A IA comprou: " + cartasIA.getCarta(cartasIA.verificarTamanhoBaralho()-1).toString());
+                System.out.println("O banqueiro comprou: " + cartasIA.getCarta(cartasIA.verificarTamanhoBaralho()-1).toString());
 
                 if(cartasIA.calcularMao() > 21) {
-                    System.out.println("IA se fodeu: " + cartasIA.calcularMao());
+                    System.out.println("O banqueiro estourou: " + cartasIA.calcularMao());
                     roundFinalizado = true;
                 }
             }
 
+            scoreDetalhado[0][qtdJogos] = cartasJogador.calcularMao();
+            scoreDetalhado[1][qtdJogos] = cartasIA.calcularMao();
+
             if(cartasJogador.calcularMao() == cartasIA.calcularMao())
                 System.out.println("O jogo EMPATOU");
             else if((cartasJogador.calcularMao() > cartasIA.calcularMao()) && !roundFinalizado){
-                System.out.println("O jogador ganhou.");
+                System.out.println("O jogador GANHOU.");
                 score[0][qtdJogos] = true;
                 score[1][qtdJogos] = false;
             }else{
-                System.out.println("A IA GANHOU");
+                System.out.println("O banqueiro GANHOU");
                 score[1][qtdJogos] = true;
                 score[0][qtdJogos] = false;
             }
 
-            System.out.println("Cartas IA: " + cartasIA.calcularMao());
-            System.out.println("Cartas Jogador: " + cartasJogador.calcularMao());
+            System.out.println("Pontos banqueiro: " + cartasIA.calcularMao());
+            System.out.println("Pontos jogador: " + cartasJogador.calcularMao());
             qtdJogos++;
 
             System.out.println("\n");
@@ -113,6 +122,16 @@ public class Main {
 
             if(qtdJogos == escolha){
                 contarPlacar(score, escolha);
+
+                TimeUnit.SECONDS.sleep(1);
+
+                System.out.println("Pontuação Detalhada");
+                for (int i = 0; i < qtdJogos; i++) {
+                    System.out.println("Jogo " + (i+1));
+                    System.out.println("\nPontuação Jogador: "+ scoreDetalhado[0][i]);
+                    System.out.println("\nPontuação Banqueiro: " + scoreDetalhado[1][i]);
+
+                }
             }
             else
                 System.out.println("Round finalizado.");
@@ -124,8 +143,6 @@ public class Main {
         scanner.close();
     }
 
-
-
     public static boolean condicao(){
         Random random = new Random();
         return random.nextBoolean();
@@ -134,9 +151,9 @@ public class Main {
     public static void imprimirBaralho(Baralho baralho){
         String tmp = "";
         for (int i = 1; i < baralho.verificarTamanhoBaralho(); i++){
-            tmp += baralho.getCarta(i).toString() + ",   ";
+            tmp += baralho.getCarta(i).toString() + ", ";
         }
-            System.out.println("Mão do oponente: " + tmp + " e a outro está virada ");
+            System.out.println("Mão do oponente: " + tmp + "e a outra está virada ");
     }
 
     public static void contarPlacar(boolean[][] placar, int qtdJogos){
