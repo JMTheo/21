@@ -9,7 +9,3 @@ BCC - 3º Semestre
 + João Matheus
 + José Augusto
 + Wesley Vitorio
-
-# TODO:
-+ Fazer o histórico das jogadas [Matriz 2]
-+ Adicionar a classe Validador
