@@ -52,7 +52,7 @@ public class Baralho {
     public int calcularMao() {
         int valorTotal = 0;
         for (Carta umaCarta : this.cartas) {
-            switch (umaCarta.getValue()) {
+            switch (umaCarta.getValor()) {
                 case DOIS:
                     valorTotal += 2;
                     break;

@@ -14,7 +14,7 @@ public class Carta{
         return  this.valor.toString() + " de " +  this.naipe.toString();
     }
 
-    public Valores getValue(){
+    public Valores getValor(){
         return this.valor;
     }
 }
