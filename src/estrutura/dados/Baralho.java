@@ -109,12 +109,8 @@ public class Baralho {
 
 
 
-    public void devolverCartas(Baralho destino){
+    public void devolverCartas(){
         int tamanhoDoBaralho = this.cartas.size();
-        //Colocando de volta
-        for(int i = 0; i < tamanhoDoBaralho; i++){
-            destino.adicionarCarta(this.getCarta(i));
-        }
         //Esvaziando o deck
         for(int i = 0; i < tamanhoDoBaralho; i++){
             this.removerCarta(0);

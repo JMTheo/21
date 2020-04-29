@@ -20,15 +20,28 @@ public class Main {
         //Mão da i.a
         Baralho cartasIA = new Baralho();
 
+        Lista listaBaralhos = new Lista();
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Escolha a quantidade de partidas, 3 ou 5");
-        //Adicionar o validador dps
         int escolha = Validador.validarInt(scanner.nextLine());
+
+        for (int i = 0; i < escolha; i++) {
+            baralho.criarBaralho();
+            baralho.embaralhar();
+
+            listaBaralhos.enfileira(baralho);
+        }
+
+
+
         int qtdJogos = 0;
         boolean[][] score = new boolean[3][escolha];
         int[][] scoreDetalhado = new int[2][escolha];
 
-        while (qtdJogos < escolha ){ 
+        while (qtdJogos < escolha ){
+            baralho = listaBaralhos.pegarEl(qtdJogos).getDado();
+
             System.out.println("Distribuindo as cartas...");
             boolean roundFinalizado = false;
 
@@ -114,11 +127,10 @@ public class Main {
             System.out.println("Pontos jogador: " + cartasJogador.calcularMao());
             qtdJogos++;
 
-            System.out.println("\n");
-
             //Colocando as cartas de volta ao baralho
-            cartasJogador.devolverCartas(baralho);
-            cartasIA.devolverCartas(baralho);
+            cartasJogador.devolverCartas();
+            cartasIA.devolverCartas();
+
 
             if(qtdJogos == escolha){
                 contarPlacar(score, escolha);
@@ -128,8 +140,8 @@ public class Main {
                 System.out.println("Pontuação Detalhada");
                 for (int i = 0; i < qtdJogos; i++) {
                     System.out.println("Jogo " + (i+1));
-                    System.out.println("\nPontuação Jogador: "+ scoreDetalhado[0][i]);
-                    System.out.println("\nPontuação Banqueiro: " + scoreDetalhado[1][i]);
+                    System.out.println("Pontuação Jogador: "+ scoreDetalhado[0][i]);
+                    System.out.println("Pontuação Banqueiro: " + scoreDetalhado[1][i]);
 
                 }
             }
