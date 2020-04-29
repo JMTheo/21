@@ -134,6 +134,7 @@ public class Main {
 
             if(qtdJogos == escolha){
                 contarPlacar(score, escolha);
+                System.out.println();
 
                 TimeUnit.SECONDS.sleep(1);
 
@@ -141,7 +142,7 @@ public class Main {
                 for (int i = 0; i < qtdJogos; i++) {
                     System.out.println("Jogo " + (i+1));
                     System.out.println("Pontuação Jogador: "+ scoreDetalhado[0][i]);
-                    System.out.println("Pontuação Banqueiro: " + scoreDetalhado[1][i]);
+                    System.out.println("Pontuação Banqueiro: " + scoreDetalhado[1][i] + "\n");
 
                 }
             }
