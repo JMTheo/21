@@ -111,8 +111,10 @@ public class Main {
             scoreDetalhado[0][qtdJogos] = cartasJogador.calcularMao();
             scoreDetalhado[1][qtdJogos] = cartasIA.calcularMao();
 
-            if(cartasJogador.calcularMao() == cartasIA.calcularMao())
+            if(cartasJogador.calcularMao() == cartasIA.calcularMao()){
                 System.out.println("O jogo EMPATOU");
+                score[2][qtdJogos] = true;
+            }
             else if((cartasJogador.calcularMao() > cartasIA.calcularMao()) && !roundFinalizado){
                 System.out.println("O jogador GANHOU.");
                 score[0][qtdJogos] = true;
