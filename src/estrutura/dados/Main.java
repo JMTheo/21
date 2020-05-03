@@ -189,8 +189,8 @@ public class Main {
                 contadorEmpates++;
         }
         System.out.println("=== PLACAR FINAL ===");
-        System.out.println("Vitorias Jogador: " + contadorJ);
-        System.out.println("Vitorias IA: " + contadorIA);
+        System.out.println("Vitorias do Jogador: " + contadorJ);
+        System.out.println("Vitorias do Banqueiro: " + contadorIA);
         System.out.println("Empates: " + contadorEmpates);
 
     }
