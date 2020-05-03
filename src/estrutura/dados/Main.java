@@ -11,8 +11,6 @@ public class Main {
 
         //Baralho do jogo
         Baralho baralho = new Baralho();
-        baralho.criarBaralho();
-        baralho.embaralhar();
 
         //Mão do jogador
         Baralho cartasJogador = new Baralho();
